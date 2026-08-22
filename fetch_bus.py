@@ -55,123 +55,116 @@ def fetch_html(url):
 
 
 def parse_timetable(html, stop_id=""):
+    """
+    Parse Tokyo Bus timetable from HTML.
+    Supports multiple HTML structures and formats.
+    """
     parser = TextExtractor()
     parser.feed(html)
     text = parser.get_text()
 
-    # Debug: save the extracted text for inspection
-    print(f"\n=== Debug info for {stop_id} ===")
-    print(f"Text length: {len(text)} characters")
-    print(f"First 500 chars:\n{text[:500]}")
-    print("=" * 40)
+    print(f"\n=== Parsing {stop_id} ===")
+    print(f"Text length: {len(text)} chars")
 
+    # Extract service note
     note_match = re.search(
         r"(\d{1,2}月\d{1,2}日の[^\n]*ダイヤで運行しております。)",
         text,
     )
-
+    
     service_note = (
         note_match.group(1)
         if note_match
         else "当日の公式ダイヤ"
     )
 
-    start = text.find("改正日：")
-
-    if start != -1:
-        text = text[start:]
-
-    end = text.find(
-        "このバス停の他の系統を見る"
-    )
-
-    if end != -1:
-        text = text[:end:]
-
     times = []
-
-    hour_matches = list(
-        re.finditer(
-            r"(?m)^(\d{1,2})ジ$",
-            text
-        )
-    )
-
-    print(f"Hour matches found: {len(hour_matches)}")
+    
+    # Strategy 1: Original pattern - look for "NNジ" (hour) followed by minutes
+    print("Strategy 1: Looking for 'ジ' hour pattern...")
+    hour_matches = list(re.finditer(r"(?m)^(\d{1,2})ジ$", text))
+    print(f"  Found {len(hour_matches)} hour markers")
+    
     if hour_matches:
-        print(f"First few hour matches: {[m.group(1) for m in hour_matches[:5]]}")
+        for i, match in enumerate(hour_matches):
+            hour = int(match.group(1))
 
-    for i, match in enumerate(hour_matches):
-        hour = int(match.group(1))
+            if not 0 <= hour <= 23:
+                continue
 
-        if not 0 <= hour <= 23:
-            continue
-
-        section_start = match.end()
-
-        section_end = (
-            hour_matches[i + 1].start()
-            if i + 1 < len(hour_matches)
-            else len(text)
-        )
-
-        section = text[
-            section_start:section_end
-        ]
-
-        minutes = [
-            int(x)
-            for x in re.findall(
-                r"(?<!\d)([0-5]\d)(?!\d)",
-                section,
-            )
-        ]
-
-        for minute in minutes:
-            times.append(
-                f"{hour:02d}:{minute:02d}"
+            section_start = match.end()
+            section_end = (
+                hour_matches[i + 1].start()
+                if i + 1 < len(hour_matches)
+                else len(text)
             )
 
+            section = text[section_start:section_end]
+
+            # Extract minutes from this hour section
+            minutes = [
+                int(x)
+                for x in re.findall(
+                    r"(?<!\d)([0-5]\d)(?!\d)",
+                    section,
+                )
+            ]
+
+            for minute in minutes:
+                times.append(f"{hour:02d}:{minute:02d}")
+    
+    # Strategy 2: If no times found, try HH:MM format directly
+    if not times:
+        print("Strategy 2: Looking for HH:MM pattern...")
+        time_pattern = re.findall(r"(\d{1,2}):([0-5]\d)", text)
+        print(f"  Found {len(time_pattern)} time entries")
+        for hour_str, minute_str in time_pattern:
+            hour = int(hour_str)
+            minute = int(minute_str)
+            if 0 <= hour <= 23:
+                times.append(f"{hour:02d}:{minute:02d}")
+    
+    # Strategy 3: If still no times, try looking for standalone 2-digit numbers
+    # that could be minutes after hour indicators
+    if not times:
+        print("Strategy 3: Looking for alternative patterns...")
+        # Look for patterns like "07" followed by "00 05 10" etc
+        alt_pattern = re.findall(r"(\d{1,2})\s+([0-9]{2}\s+)+", text)
+        print(f"  Found {len(alt_pattern)} alternative patterns")
+    
+    # Remove duplicates and sort
     times = sorted(
         set(times),
-        key=lambda value:
-        tuple(map(int, value.split(":"))),
+        key=lambda value: tuple(map(int, value.split(":"))),
     )
 
-    print(f"Times found: {len(times)}")
+    print(f"Total unique times: {len(times)}")
     if times:
-        print(f"Sample times: {times[:5]}")
-
+        print(f"Sample: {times[:5]}")
+    
     if not times:
-        raise ValueError(
-            "No timetable times found"
-        )
+        raise ValueError("No timetable times found")
 
     return service_note, times
 
 
 def main():
-    now = datetime.now(
-        ZoneInfo("Asia/Tokyo")
-    )
+    now = datetime.now(ZoneInfo("Asia/Tokyo"))
 
     result = {
-        "fetched_at":
-            now.isoformat(timespec="seconds"),
-        "date":
-            now.strftime("%Y-%m-%d"),
+        "fetched_at": now.isoformat(timespec="seconds"),
+        "date": now.strftime("%Y-%m-%d"),
         "stops": [],
     }
 
     for stop in STOPS:
         try:
-            print(f"\nFetching {stop['id']}...")
+            print(f"\n{'='*60}")
+            print(f"Fetching: {stop['id']}")
             html = fetch_html(stop["url"])
-            print(f"HTML fetched, length: {len(html)}")
+            print(f"✓ HTML fetched ({len(html)} chars)")
 
-            service_note, times = (
-                parse_timetable(html, stop["id"])
-            )
+            service_note, times = parse_timetable(html, stop["id"])
 
             result["stops"].append({
                 **stop,
@@ -179,10 +172,12 @@ def main():
                 "times": times,
                 "ok": True,
             })
-            print(f"✓ {stop['id']} succeeded")
+            print(f"✓ {stop['id']} - {len(times)} times found")
 
         except Exception as exc:
             print(f"✗ {stop['id']} failed: {type(exc).__name__}: {exc}")
+            import traceback
+            traceback.print_exc()
             result["stops"].append({
                 **stop,
                 "service_note": "",
@@ -191,19 +186,13 @@ def main():
                 "error": str(exc),
             })
 
-    if not any(
-        stop["ok"]
-        for stop in result["stops"]
-    ):
-        raise RuntimeError(
-            "Failed to fetch all bus timetables"
-        )
+    print(f"\n{'='*60}")
+    print(f"Results: {sum(1 for s in result['stops'] if s['ok'])} succeeded")
+    
+    if not any(stop["ok"] for stop in result["stops"]):
+        raise RuntimeError("Failed to fetch all bus timetables")
 
-    with open(
-        "bus_data.json",
-        "w",
-        encoding="utf-8",
-    ) as file:
+    with open("bus_data.json", "w", encoding="utf-8") as file:
         json.dump(
             result,
             file,
@@ -212,7 +201,7 @@ def main():
         )
         file.write("\n")
 
-    print("\n✓ Successfully wrote bus_data.json")
+    print("✓ Successfully wrote bus_data.json")
 
 
 if __name__ == "__main__":
