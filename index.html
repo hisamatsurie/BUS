@@ -1,318 +1,223 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-
   <meta charset="UTF-8">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>葛西方面 バス時刻表</title>
 
   <style>
-
     * {
-
       box-sizing: border-box;
-
     }
 
     body {
-
       margin: 0;
-
       padding: 16px;
-
       font-family:
-
         -apple-system,
-
         BlinkMacSystemFont,
-
         "Segoe UI",
-
         sans-serif;
-
       background: #f3f5f7;
-
       color: #222;
-
     }
 
     .container {
-
       max-width: 600px;
-
       margin: 0 auto;
-
     }
 
     .header {
-
       display: flex;
-
       justify-content: space-between;
-
       align-items: center;
-
       gap: 12px;
-
       margin-bottom: 18px;
-
     }
 
     h1 {
-
       margin: 0;
-
       font-size: 22px;
-
     }
 
     .now {
-
       margin-top: 5px;
-
-      font-size: 13px;
-
+      font-size: 14px;
       color: #777;
-
     }
 
     .reload {
-
       border: 0;
+      border-radius: 12px;
+      padding: 14px 17px;
+      min-width: 76px;
 
-      border-radius: 10px;
-
-      padding: 11px 15px;
-
-      background: #007aff;
-
+      background: #287cf4;
       color: white;
 
-      font-size: 14px;
-
+      font-size: 16px;
       font-weight: 600;
-
     }
 
     .card {
-
       margin-bottom: 18px;
-
       padding: 17px;
 
       background: white;
-
-      border-radius: 16px;
+      border-radius: 18px;
 
       box-shadow:
-
-        0 2px 10px rgba(0,0,0,.06);
-
+        0 2px 10px rgba(0,0,0,.04);
     }
 
     .stop-header {
-
       display: flex;
-
       justify-content: space-between;
-
       align-items: flex-start;
+      gap: 12px;
 
-      padding-bottom: 12px;
+      padding-bottom: 14px;
+      margin-bottom: 14px;
 
-      margin-bottom: 12px;
-
-      border-bottom: 1px solid #eee;
-
+      border-bottom: 1px solid #e8e8e8;
     }
 
     .stop-name {
-
-      font-size: 19px;
-
+      font-size: 21px;
       font-weight: 700;
-
     }
 
     .route {
-
-      margin-top: 4px;
-
-      font-size: 13px;
-
+      margin-top: 6px;
+      font-size: 14px;
       color: #666;
-
     }
 
     .official {
+      flex-shrink: 0;
 
-      font-size: 13px;
-
-      color: #007aff;
-
+      font-size: 14px;
+      color: #287cf4;
       text-decoration: none;
+    }
 
+    .service-note {
+      margin-bottom: 12px;
+      font-size: 13px;
+      color: #777;
     }
 
     .previous {
-
       margin-bottom: 10px;
+      padding: 10px 12px;
 
-      padding: 9px 11px;
-
-      border-radius: 9px;
-
+      border-radius: 10px;
       background: #f2f2f2;
 
       font-size: 14px;
-
       color: #777;
-
     }
 
     .previous strong {
-
-      color: #555;
-
+      color: #444;
+      font-size: 16px;
     }
 
     .next {
-
       padding: 15px;
-
       margin-bottom: 13px;
 
       border-radius: 13px;
-
       background: #eef6ff;
-
     }
 
     .next-label {
-
-      margin-bottom: 3px;
+      margin-bottom: 4px;
 
       font-size: 13px;
-
       font-weight: 600;
-
       color: #0066cc;
-
     }
 
     .next-row {
-
       display: flex;
-
       align-items: center;
-
       flex-wrap: wrap;
-
-      gap: 9px;
-
+      gap: 10px;
     }
 
     .next-time {
-
-      font-size: 32px;
-
+      font-size: 34px;
       line-height: 1.1;
 
       font-weight: 750;
-
       color: #0057ae;
-
     }
 
     .minutes {
-
-      padding: 4px 9px;
-
+      padding: 4px 10px;
       border-radius: 20px;
 
       background: #ff5a36;
-
       color: white;
 
       font-size: 14px;
-
       font-weight: 650;
-
     }
 
     .section-label {
-
       margin-top: 10px;
-
       margin-bottom: 8px;
 
       font-size: 13px;
-
       color: #777;
-
     }
 
     .times {
-
       display: flex;
-
       flex-wrap: wrap;
-
       gap: 8px;
-
     }
 
     .time {
+      min-width: 61px;
 
-      min-width: 58px;
-
-      padding: 8px 10px;
+      padding: 9px 10px;
 
       text-align: center;
 
       border-radius: 9px;
-
       background: #f2f3f5;
 
       font-size: 15px;
-
       font-weight: 600;
-
     }
 
     .status {
-
       padding: 10px 0;
-
       color: #888;
-
       font-size: 14px;
-
     }
 
     .error {
-
       color: #b00020;
-
+      font-size: 15px;
     }
 
     .updated {
-
-      margin-top: 13px;
-
+      margin-top: 14px;
       font-size: 11px;
-
       color: #aaa;
-
       text-align: right;
-
     }
 
+    .global-status {
+      margin: -5px 0 14px;
+      font-size: 12px;
+      color: #999;
+    }
   </style>
-
 </head>
 
 <body>
@@ -322,24 +227,24 @@
   <div class="header">
 
     <div>
-
       <h1>🚌 葛西方面 バス</h1>
-
       <div class="now" id="now"></div>
-
     </div>
 
     <button
-
       class="reload"
-
       id="reloadButton">
-
       更新
-
     </button>
 
   </div>
+
+  <div
+    class="global-status"
+    id="globalStatus">
+    最新データを読み込んでいます…
+  </div>
+
 
   <!-- 葛西郵便局 -->
 
@@ -350,44 +255,33 @@
       <div>
 
         <div class="stop-name">
-
           葛西郵便局
-
         </div>
 
         <div class="route">
-
           葛西24　なぎさニュータウン行
-
         </div>
 
       </div>
 
       <a
-
         class="official"
-
         href="https://tobus.jp/sp/blsys/stop/time?ud=1&poleno=2&ln=ja&stopid=2084&routecode=76"
-
-        target="_blank">
-
+        target="_blank"
+        rel="noopener">
         都バス公式
-
       </a>
 
     </div>
 
     <div
-
       id="kasai-post"
-
       class="status">
-
-      時刻表を取得しています…
-
+      読み込み中…
     </div>
 
   </div>
+
 
   <!-- 江戸川車庫前 -->
 
@@ -398,543 +292,298 @@
       <div>
 
         <div class="stop-name">
-
           江戸川車庫前
-
         </div>
 
         <div class="route">
-
           秋26　葛西駅前行
-
         </div>
 
       </div>
 
       <a
-
         class="official"
-
         href="https://tobus.jp/sp/blsys/stop/time?routecode=81&poleno=2&stopid=310&ln=ja"
-
-        target="_blank">
-
+        target="_blank"
+        rel="noopener">
         都バス公式
-
       </a>
 
     </div>
 
     <div
-
       id="edogawa"
-
       class="status">
-
-      時刻表を取得しています…
-
+      読み込み中…
     </div>
 
   </div>
 
 </div>
 
+
 <script>
 
-const STOPS = [
+function updateClock() {
 
-  {
+  const now = new Date();
 
-    id: "kasai-post",
+  const date =
+    now.toLocaleDateString(
+      "ja-JP",
+      {
+        month: "numeric",
+        day: "numeric",
+        weekday: "short"
+      }
+    );
 
-    url:
+  const time =
+    now.toLocaleTimeString(
+      "ja-JP",
+      {
+        hour: "2-digit",
+        minute: "2-digit"
+      }
+    );
 
-      "https://tobus.jp/sp/blsys/stop/time?ud=1&poleno=2&ln=ja&stopid=2084&routecode=76"
+  document
+    .getElementById("now")
+    .textContent =
+      date + " " + time;
+}
 
-  },
 
-  {
-
-    id: "edogawa",
-
-    url:
-
-      "https://tobus.jp/sp/blsys/stop/time?routecode=81&poleno=2&stopid=310&ln=ja"
-
-  }
-
-];
-
-/*
-
-  GitHub Pages から
-
-  tob​​us.jp を直接取得すると
-
-  CORSで止まる可能性があるため、
-
-  AllOrigins を経由して
-
-  都バス公式ページを取得します。
-
-*/
-
-const PROXY =
-
-  "https://api.allorigins.win/raw?url=";
 
 function currentMinutes() {
 
   const now = new Date();
 
   return (
-
-    now.getHours() * 60 +
-
+    now.getHours() * 60
+    +
     now.getMinutes()
-
   );
-
 }
 
-function updateClock() {
 
-  const now = new Date();
 
-  const text =
-
-    now.toLocaleDateString(
-
-      "ja-JP",
-
-      {
-
-        month: "numeric",
-
-        day: "numeric",
-
-        weekday: "short"
-
-      }
-
-    )
-
-    +
-
-    " "
-
-    +
-
-    now.toLocaleTimeString(
-
-      "ja-JP",
-
-      {
-
-        hour: "2-digit",
-
-        minute: "2-digit"
-
-      }
-
-    );
-
-  document.getElementById("now")
-
-    .textContent = text;
-
-}
-
-function parseTimetable(html) {
-
-  const parser =
-
-    new DOMParser();
-
-  const doc =
-
-    parser.parseFromString(
-
-      html,
-
-      "text/html"
-
-    );
-
-  /*
-
-    HTMLタグを除去して
-
-    都バスページ上の文字だけ取得
-
-  */
-
-  let text =
-
-    doc.body.innerText;
-
-  /*
-
-    例
-
-    08ジ
-
-    19 35 47
-
-    09ジ
-
-    00 10 20 31 43 56
-
-    の形から時刻を抽出
-
-  */
-
-  text =
-
-    text.replace(/\r/g, "");
-
-  const times = [];
-
-  const regex =
-
-    /(\d{1,2})\s*ジ([\s\S]*?)(?=\d{1,2}\s*ジ|このバス停|$)/g;
-
-  let match;
-
-  while (
-
-    (match = regex.exec(text)) !== null
-
-  ) {
-
-    const hour =
-
-      Number(match[1]);
-
-    const section =
-
-      match[2];
-
-    const minutes =
-
-      section.match(
-
-        /(?:^|\s)([0-5]\d)(?=\s|$)/g
-
-      );
-
-    if (!minutes) {
-
-      continue;
-
-    }
-
-    minutes.forEach(
-
-      minuteText => {
-
-        const minute =
-
-          Number(
-
-            minuteText.trim()
-
-          );
-
-        const total =
-
-          hour * 60 + minute;
-
-        times.push({
-
-          hour,
-
-          minute,
-
-          total,
-
-          label:
-
-            String(hour)
-
-              .padStart(2,"0")
-
-            +
-
-            ":"
-
-            +
-
-            String(minute)
-
-              .padStart(2,"0")
-
-        });
-
-      }
-
-    );
-
-  }
-
-  /*
-
-    重複除去
-
-  */
-
-  const map =
-
-    new Map();
-
-  times.forEach(
-
-    item =>
-
-      map.set(
-
-        item.total,
-
-        item
-
-      )
-
-  );
-
-  return Array
-
-    .from(
-
-      map.values()
-
-    )
-
-    .sort(
-
-      (a,b) =>
-
-        a.total - b.total
-
-    );
-
-}
-
-function renderTimetable(
-
-  element,
-
-  timetable
-
+function toBusObject(
+  timeString
 ) {
 
-  const now =
+  const parts =
+    timeString
+      .split(":")
+      .map(Number);
 
-    currentMinutes();
+  const hour =
+    parts[0];
 
-  if (
+  const minute =
+    parts[1];
 
-    !timetable ||
+  return {
 
-    timetable.length === 0
+    label:
+      String(hour)
+        .padStart(2, "0")
+      +
+      ":"
+      +
+      String(minute)
+        .padStart(2, "0"),
 
-  ) {
+    total:
+      hour * 60
+      +
+      minute
 
-    element.innerHTML =
+  };
+}
 
-      '<div class="error">時刻表を取得できませんでした。</div>';
 
+
+function renderStop(
+  stop
+) {
+
+  const element =
+    document.getElementById(
+      stop.id
+    );
+
+  if (!element) {
     return;
-
   }
 
+
+  if (
+    !stop.ok
+    ||
+    !Array.isArray(stop.times)
+    ||
+    stop.times.length === 0
+  ) {
+
+    element.innerHTML = `
+      <div class="error">
+        このバス停の時刻表データを取得できませんでした。
+      </div>
+    `;
+
+    return;
+  }
+
+
+  const now =
+    currentMinutes();
+
+
+  const timetable =
+    stop.times
+      .map(toBusObject)
+      .sort(
+        (a, b) =>
+          a.total - b.total
+      );
+
+
   /*
-
-    直前の1件
-
+    現在時刻より前の
+    一番近い1本
   */
 
   const previous =
-
     timetable
-
       .filter(
-
         bus =>
-
           bus.total < now
-
       )
-
       .at(-1);
 
+
   /*
-
     現在時刻から
-
     2時間以内
-
   */
 
-  const endTime =
-
+  const end =
     now + 120;
 
+
   const upcoming =
+    timetable
+      .filter(
+        bus =>
+          bus.total >= now
+          &&
+          bus.total <= end
+      );
 
-    timetable.filter(
-
-      bus =>
-
-        bus.total >= now
-
-        &&
-
-        bus.total <= endTime
-
-    );
-
-  /*
-
-    今日の便がもう無い場合
-
-  */
-
-  if (
-
-    !previous &&
-
-    upcoming.length === 0
-
-  ) {
-
-    element.innerHTML =
-
-      "<div>現在表示できる便はありません。</div>";
-
-    return;
-
-  }
 
   let html = "";
 
+
   /*
-
-    直前の便
-
+    都バス側が返した
+    当日のダイヤ情報
   */
 
-  if (previous) {
+  if (
+    stop.service_note
+  ) {
 
     html += `
-
-      <div class="previous">
-
-        直前の便　
-
-        <strong>
-
-          ${previous.label}
-
-        </strong>
-
+      <div class="service-note">
+        ${stop.service_note}
       </div>
-
     `;
 
   }
 
+
   /*
-
-    次の便
-
+    直前1本
   */
 
   if (
+    previous
+  ) {
 
+    html += `
+      <div class="previous">
+
+        直前の便　
+        <strong>
+          ${previous.label}
+        </strong>
+
+      </div>
+    `;
+
+  }
+
+
+  /*
+    これからの便
+  */
+
+  if (
     upcoming.length > 0
-
   ) {
 
     const next =
-
       upcoming[0];
 
-    const diff =
 
+    const diff =
       next.total - now;
 
-    html += `
 
+    html += `
       <div class="next">
 
         <div class="next-label">
-
           次のバス
-
         </div>
 
         <div class="next-row">
 
           <div class="next-time">
-
             ${next.label}
-
           </div>
 
           <div class="minutes">
-
             あと ${diff}分
-
           </div>
 
         </div>
 
       </div>
-
     `;
 
-    /*
-
-      次の便を含めて
-
-      2時間以内の全便
-
-    */
 
     html += `
-
       <div class="section-label">
-
         これから2時間
-
       </div>
 
       <div class="times">
 
         ${
-
           upcoming
-
             .map(
-
               bus => `
-
                 <div class="time">
-
                   ${bus.label}
-
                 </div>
-
               `
-
             )
-
             .join("")
-
         }
 
       </div>
-
     `;
 
   }
@@ -942,241 +591,203 @@ function renderTimetable(
   else {
 
     html += `
-
       <div class="status">
-
-        本日の運行は終了しました。
-
+        これから2時間以内の便はありません。
       </div>
-
     `;
 
   }
 
-  html += `
-
-    <div class="updated">
-
-      都バス時刻表から取得
-
-      ${new Date()
-
-        .toLocaleTimeString(
-
-          "ja-JP",
-
-          {
-
-            hour: "2-digit",
-
-            minute: "2-digit"
-
-          }
-
-        )
-
-      }
-
-    </div>
-
-  `;
 
   element.innerHTML =
-
     html;
-
 }
 
-async function fetchStop(
 
-  stop
 
+function formatFetchedTime(
+  value
 ) {
 
-  const element =
+  if (!value) {
+    return "";
+  }
 
+  const date =
+    new Date(value);
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+    return "";
+  }
+
+  return date
+    .toLocaleTimeString(
+      "ja-JP",
+      {
+        hour: "2-digit",
+        minute: "2-digit"
+      }
+    );
+}
+
+
+
+async function loadBusData() {
+
+  updateClock();
+
+
+  const status =
     document.getElementById(
-
-      stop.id
-
+      "globalStatus"
     );
 
-  element.innerHTML =
 
-    '<div class="status">最新の時刻表を取得しています…</div>';
+  status.textContent =
+    "最新データを読み込んでいます…";
+
 
   try {
 
-    const url =
-
-      PROXY
-
-      +
-
-      encodeURIComponent(
-
-        stop.url
-
-      );
+    /*
+      ?t= を付けることで
+      Safariのキャッシュを避ける
+    */
 
     const response =
-
       await fetch(
-
-        url,
-
+        "bus_data.json?t="
+        +
+        Date.now(),
         {
-
           cache: "no-store"
-
         }
-
       );
 
+
     if (
-
       !response.ok
-
     ) {
 
       throw new Error(
-
-        "HTTP "
-
-        +
-
-        response.status
-
+        "bus_data.json がありません"
       );
 
     }
 
-    const html =
 
-      await response.text();
+    const data =
+      await response.json();
 
-    const timetable =
 
-      parseTimetable(
+    if (
+      !Array.isArray(
+        data.stops
+      )
+    ) {
 
-        html
-
+      throw new Error(
+        "データ形式が不正です"
       );
 
-    renderTimetable(
+    }
 
-      element,
 
-      timetable
-
+    data.stops.forEach(
+      renderStop
     );
+
+
+    const fetched =
+      formatFetchedTime(
+        data.fetched_at
+      );
+
+
+    status.textContent =
+      fetched
+        ?
+        "都バス公式データ取得 "
+        + fetched
+        :
+        "都バス公式データを表示中";
+
 
   }
 
   catch(error) {
 
     console.error(
-
       error
-
     );
 
-    element.innerHTML = `
 
-      <div class="error">
+    status.textContent =
+      "まだ時刻表データが作成されていません。";
 
-        時刻表を取得できませんでした。
 
-      </div>
+    document
+      .getElementById(
+        "kasai-post"
+      )
+      .innerHTML = `
+        <div class="error">
+          時刻表データを読み込めませんでした。
+        </div>
+      `;
 
-      <div
 
-        style="
-
-          margin-top:8px;
-
-          font-size:13px;
-
-        "
-
-      >
-
-        <a
-
-          href="${stop.url}"
-
-          target="_blank">
-
-          都バス公式時刻表を開く
-
-        </a>
-
-      </div>
-
-    `;
+    document
+      .getElementById(
+        "edogawa"
+      )
+      .innerHTML = `
+        <div class="error">
+          時刻表データを読み込めませんでした。
+        </div>
+      `;
 
   }
 
 }
 
-async function fetchAll() {
 
-  updateClock();
-
-  await Promise.all(
-
-    STOPS.map(
-
-      fetchStop
-
-    )
-
-  );
-
-}
 
 document
-
   .getElementById(
-
     "reloadButton"
-
   )
-
   .addEventListener(
-
     "click",
-
-    fetchAll
-
+    loadBusData
   );
 
+
+
 /*
-
-  ページを開いたら取得
-
+  ページを開いた時
 */
 
-fetchAll();
+loadBusData();
+
+
 
 /*
-
   1分ごとに
-
-  現在時刻と時刻表を更新
-
+  現在時刻を更新して
+  直前・次便も再計算
 */
 
 setInterval(
-
-  fetchAll,
-
+  loadBusData,
   60000
-
 );
 
 </script>
 
 </body>
-
 </html>
