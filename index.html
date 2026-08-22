@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>葛西方面 直近バス案内</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f0f2f5; padding: 16px; color: #333; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    h1 { font-size: 1.25rem; font-weight: 700; color: #1a1a1a; }
+    .btn-reload { background: #007aff; color: #fff; border: none; padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; }
+    .stop-card { background: #fff; border-radius: 16px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .stop-title { font-size: 1.05rem; font-weight: 700; color: #2c3e50; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 12px; display: flex; justify-content: space-between; }
+    .status-msg { font-size: 0.9rem; color: #888; padding: 8px 0; }
+    .next-box { background: #eef7ff; border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+    .next-label { font-size: 0.8rem; color: #0066cc; font-weight: bold; }
+    .next-time { font-size: 1.8rem; font-weight: bold; color: #005bb5; }
+    .diff-badge { display: inline-block; background: #ff5722; color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.85rem; margin-left: 8px; }
+    .upcoming-box { font-size: 0.9rem; color: #555; }
+    .upcoming-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .time-chip { background: #f1f3f4; padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; }
+    .source-link { font-size: 0.75rem; color: #007aff; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>🚌 葛西方面 直近バス</h1>
+    <button class="btn-reload" onclick="fetchAllTimetables()">更新</button>
+  </div>
+  <div class="stop-card" id="card-kasai-post">
+    <div class="stop-title">
+      <span>葛西郵便局</span>
+      <a class="source-link" href="https://tobus.jp/sp/blsys/stop/time?ud=1&poleno=2&ln=ja&stopid=2084&routecode=76" target="_blank">公式</a>
+    </div>
+    <div id="content-kasai-post" class="status-msg">時刻表を取得中...</div>
+  </div>
+  <div class="stop-card" id="card-edogawa-shako">
+    <div class="stop-title">
+      <span>江戸川車庫前</span>
+      <a class="source-link" href="https://tobus.jp/sp/blsys/stop/time?routecode=81&poleno=2&stopid=310&ln=ja" target="_blank">公式</a>
+    </div>
+    <div id="content-edogawa-shako" class="status-msg">時刻表を取得中...</div>
+  </div>
+  <script>
+    const STOPS = [
+      { id: 'content-kasai-post', url: 'https://tobus.jp/sp/blsys/stop/time?ud=1&poleno=2&ln=ja&stopid=2084&routecode=76' },
+      { id: 'content-edogawa-shako', url: 'https://tobus.jp/sp/blsys/stop/time?routecode=81&poleno=2&stopid=310&ln=ja' }
+    ];
+    function parseTimetable(htmlString) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlString, 'text/html');
+      const times = [];
+      const bodyText = doc.body.innerText;
+      const hourRegex = /(\d{2})ジ([\s\S]*?)(?=(\d{2})ジ|$)/g;
+      let match;
+      while ((match = hourRegex.exec(bodyText)) !== null) {
+        const hour = match[1];
+        const minuteMatches = match[2].match(/\b\d{2}\b/g);
+        if (minuteMatches) {
+          minuteMatches.forEach(min => times.push(`${hour}:${min}`));
+        }
+      }
+      return Array.from(new Set(times)).sort();
+    }
+    async function fetchStopData(stop) {
+      const targetElement = document.getElementById(stop.id);
+      try {
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(stop.url)}`;
+        const res = await fetch(proxyUrl);
+        if (!res.ok) throw new Error('通信エラー');
+        const data = await res.json();
+        const timetable = parseTimetable(data.contents);
+        renderUpcomingBuses(targetElement, timetable);
+      } catch (err) {
+        targetElement.innerHTML = `取得失敗（<a href="${stop.url}" target="_blank">公式を開く</a>）`;
+      }
+    }
+    function renderUpcomingBuses(container, timetable) {
+      if (!timetable || timetable.length === 0) {
+        container.innerHTML = "時刻データを解析できませんでした。";
+        return;
+      }
+      const now = new Date();
+      const currentMin = now.getHours() * 60 + now.getMinutes();
+      const upcoming = timetable.map(timeStr => {
+        const [h, m] = timeStr.split(':').map(Number);
+        return { timeStr, totalMin: h * 60 + m };
+      }).filter(b => b.totalMin >= currentMin);
+      if (upcoming.length === 0) {
+        container.innerHTML = "<div>本日の運行は終了しました。</div>";
+        return;
+      }
+      const next = upcoming[0];
+      const diff = next.totalMin - currentMin;
+      const subsequent = upcoming.slice(1, 5);
+      container.innerHTML = `
+        <div class="next-box">
+          <div class="next-label">次のバス</div>
+          <div>
+            <span class="next-time">${next.timeStr} 発</span>
+            <span class="diff-badge">あと ${diff} 分</span>
+          </div>
+        </div>
+        <div class="upcoming-box">
+          <span>その後の便:</span>
+          <div class="upcoming-list">
+            ${subsequent.map(b => `<span class="time-chip">${b.timeStr}</span>`).join('') || '<span>なし</span>'}
+          </div>
+        </div>
+      `;
+    }
+    function fetchAllTimetables() {
+      STOPS.forEach(stop => {
+        document.getElementById(stop.id).innerHTML = '最新情報を取得中...';
+        fetchStopData(stop);
+      });
+    }
+    fetchAllTimetables();
+    setInterval(fetchAllTimetables, 60000);
+  </script>
+</body>
+</html>
