@@ -166,6 +166,8 @@
     </div>
 
 
+    <!-- 葛西方面 -->
+
     <div class="section-title">
       葛西方面
     </div>
@@ -187,7 +189,7 @@
 
         <a
           class="btn btn-time"
-          href="https://tobus.jp/sp/blsys/stop/time?ud=1&poleno=2&ln=ja&stopid=2084&routecode=76#:~:text=09%E3%82%B8">
+          href="https://tobus.jp/sp/blsys/stop/time?ud=1&poleno=2&ln=ja&stopid=2084&routecode=76">
           🕒 時刻表
         </a>
 
@@ -218,7 +220,7 @@
 
         <a
           class="btn btn-time"
-          href="https://tobus.jp/sp/blsys/stop/time?ud=2&poleno=2&ln=ja&stopid=310&routecode=81#:~:text=09%E3%82%B8">
+          href="https://tobus.jp/sp/blsys/stop/time?ud=2&poleno=2&ln=ja&stopid=310&routecode=81">
           🕒 時刻表
         </a>
 
@@ -233,12 +235,12 @@
     </div>
 
 
+    <!-- 船堀方面 -->
+
     <div class="section-title">
       船堀方面
     </div>
 
-
-    <!-- 葛西郵便局 船堀方面 -->
 
     <div class="card">
 
@@ -254,7 +256,7 @@
 
         <a
           class="btn btn-time"
-          href="https://tobus.jp/sp/blsys/stop/time?routecode=76&poleno=1&stopid=2084&ln=ja#:~:text=09%E3%82%B8">
+          href="https://tobus.jp/sp/blsys/stop/time?routecode=76&poleno=1&stopid=2084&ln=ja">
           🕒 時刻表
         </a>
 
@@ -280,12 +282,12 @@
     </div>
 
 
+    <!-- 東陽町行き -->
+
     <div class="section-title">
       東陽町行き
     </div>
 
-
-    <!-- 東陽七丁目 -->
 
     <div class="card">
 
@@ -301,7 +303,7 @@
 
         <a
           class="btn btn-time"
-          href="https://tobus.jp/sp/blsys/stop/time?ud=1&poleno=1&ln=ja&stopid=2298&routecode=59&daydiv=1#:~:text=09%E3%82%B8">
+          href="https://tobus.jp/sp/blsys/stop/time?ud=1&poleno=1&ln=ja&stopid=2298&routecode=59&daydiv=1">
           🕒 時刻表
         </a>
 
@@ -316,12 +318,12 @@
     </div>
 
 
+    <!-- 葛西行き -->
+
     <div class="section-title">
       葛西行き
     </div>
 
-
-    <!-- 北砂一丁目 -->
 
     <div class="card">
 
@@ -337,7 +339,7 @@
 
         <a
           class="btn btn-time"
-          href="https://tobus.jp/sp/blsys/stop/time?stopid=409&ud=2&poleno=1&ln=ja&routecode=81#:~:text=09%E3%82%B8">
+          href="https://tobus.jp/sp/blsys/stop/time?stopid=409&ud=2&poleno=1&ln=ja&routecode=81">
           🕒 時刻表
         </a>
 
@@ -363,18 +365,14 @@
 
 <script>
 
-const homeTab =
-  document.getElementById("homeTab");
+const homeTab = document.getElementById("homeTab");
+const companyTab = document.getElementById("companyTab");
 
-const companyTab =
-  document.getElementById("companyTab");
+const homePage = document.getElementById("homePage");
+const companyPage = document.getElementById("companyPage");
 
-const homePage =
-  document.getElementById("homePage");
 
-const companyPage =
-  document.getElementById("companyPage");
-
+/* 自宅・会社 切り替え */
 
 homeTab.addEventListener("click", () => {
 
@@ -394,6 +392,37 @@ companyTab.addEventListener("click", () => {
 
   companyPage.classList.add("active");
   homePage.classList.remove("active");
+
+});
+
+
+/* --------------------------------
+   時刻表
+   押した瞬間の現在時刻へジャンプ
+-------------------------------- */
+
+document.querySelectorAll(".btn-time").forEach(button => {
+
+  button.addEventListener("click", function(event) {
+
+    event.preventDefault();
+
+    /* 現在の「時」を取得 */
+    const hour =
+      String(new Date().getHours()).padStart(2, "0");
+
+    /* 元の都バスURL */
+    const baseUrl = this.href.split("#")[0];
+
+    /* 例：14ジ */
+    const target =
+      encodeURIComponent(hour + "ジ");
+
+    /* 都バス公式を現在時刻の行から開く */
+    window.location.href =
+      baseUrl + "#:~:text=" + target;
+
+  });
 
 });
 
