@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>葛西方面 バス時刻表</title>
+  <title>葛西方面 バス</title>
 
   <style>
     * {
@@ -13,7 +13,7 @@
 
     body {
       margin: 0;
-      padding: 16px;
+      padding: 20px 16px 40px;
       font-family:
         -apple-system,
         BlinkMacSystemFont,
@@ -24,198 +24,77 @@
     }
 
     .container {
-      max-width: 600px;
+      max-width: 560px;
       margin: 0 auto;
     }
 
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-
     h1 {
-      margin: 0;
-      font-size: 22px;
+      margin: 0 0 6px;
+      font-size: 28px;
     }
 
-    .now {
-      margin-top: 5px;
-      font-size: 14px;
+    .subtitle {
+      margin-bottom: 22px;
       color: #777;
-    }
-
-    .reload {
-      border: 0;
-      border-radius: 12px;
-      padding: 14px 17px;
-      min-width: 76px;
-
-      background: #287cf4;
-      color: white;
-
-      font-size: 16px;
-      font-weight: 600;
+      font-size: 14px;
     }
 
     .card {
-      margin-bottom: 18px;
-      padding: 17px;
-
-      background: white;
+      background: #fff;
       border-radius: 18px;
-
-      box-shadow:
-        0 2px 10px rgba(0,0,0,.04);
-    }
-
-    .stop-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-
-      padding-bottom: 14px;
-      margin-bottom: 14px;
-
-      border-bottom: 1px solid #e8e8e8;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.05);
     }
 
     .stop-name {
-      font-size: 21px;
+      font-size: 24px;
       font-weight: 700;
+      margin-bottom: 6px;
     }
 
     .route {
-      margin-top: 6px;
-      font-size: 14px;
       color: #666;
+      font-size: 15px;
+      margin-bottom: 18px;
     }
 
-    .official {
-      flex-shrink: 0;
-
-      font-size: 14px;
-      color: #287cf4;
-      text-decoration: none;
-    }
-
-    .service-note {
-      margin-bottom: 12px;
-      font-size: 13px;
-      color: #777;
-    }
-
-    .previous {
-      margin-bottom: 10px;
-      padding: 10px 12px;
-
-      border-radius: 10px;
-      background: #f2f2f2;
-
-      font-size: 14px;
-      color: #777;
-    }
-
-    .previous strong {
-      color: #444;
-      font-size: 16px;
-    }
-
-    .next {
-      padding: 15px;
-      margin-bottom: 13px;
-
-      border-radius: 13px;
-      background: #eef6ff;
-    }
-
-    .next-label {
-      margin-bottom: 4px;
-
-      font-size: 13px;
-      font-weight: 600;
-      color: #0066cc;
-    }
-
-    .next-row {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
 
-    .next-time {
-      font-size: 34px;
-      line-height: 1.1;
-
-      font-weight: 750;
-      color: #0057ae;
-    }
-
-    .minutes {
-      padding: 4px 10px;
-      border-radius: 20px;
-
-      background: #ff5a36;
-      color: white;
-
-      font-size: 14px;
-      font-weight: 650;
-    }
-
-    .section-label {
-      margin-top: 10px;
-      margin-bottom: 8px;
-
-      font-size: 13px;
-      color: #777;
-    }
-
-    .times {
+    .btn {
       display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .time {
-      min-width: 61px;
-
-      padding: 9px 10px;
-
+      align-items: center;
+      justify-content: center;
+      min-height: 58px;
+      padding: 12px 10px;
+      border-radius: 13px;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 700;
       text-align: center;
-
-      border-radius: 9px;
-      background: #f2f3f5;
-
-      font-size: 15px;
-      font-weight: 600;
     }
 
-    .status {
-      padding: 10px 0;
-      color: #888;
-      font-size: 14px;
+    .btn-time {
+      background: #287cf4;
+      color: #fff;
     }
 
-    .error {
-      color: #b00020;
-      font-size: 15px;
+    .btn-approach {
+      background: #eef4ff;
+      color: #1765c1;
+      border: 1px solid #cfe0fb;
     }
 
-    .updated {
-      margin-top: 14px;
-      font-size: 11px;
-      color: #aaa;
-      text-align: right;
-    }
-
-    .global-status {
-      margin: -5px 0 14px;
-      font-size: 12px;
+    .hint {
+      margin-top: 22px;
       color: #999;
+      font-size: 12px;
+      line-height: 1.6;
+      text-align: center;
     }
   </style>
 </head>
@@ -224,570 +103,78 @@
 
 <div class="container">
 
-  <div class="header">
+  <h1>🚌 葛西方面 バス</h1>
 
-    <div>
-      <h1>🚌 葛西方面 バス</h1>
-      <div class="now" id="now"></div>
-    </div>
-
-    <button
-      class="reload"
-      id="reloadButton">
-      更新
-    </button>
-
-  </div>
-
-  <div
-    class="global-status"
-    id="globalStatus">
-    最新データを読み込んでいます…
-  </div>
-
-
-  <!-- 葛西郵便局 -->
-
-  <div class="card">
-
-    <div class="stop-header">
-
-      <div>
-
-        <div class="stop-name">
-          葛西郵便局
-        </div>
-
-        <div class="route">
-          葛西24　なぎさニュータウン行
-        </div>
-
-      </div>
-
-      <a
-        class="official"
-        href="https://tobus.jp/sp/blsys/stop/time?ud=1&poleno=2&ln=ja&stopid=2084&routecode=76"
-        target="_blank"
-        rel="noopener">
-        都バス公式
-      </a>
-
-    </div>
-
-    <div
-      id="kasai-post"
-      class="status">
-      読み込み中…
-    </div>
-
+  <div class="subtitle">
+    バス停を選んで都バス公式ページを開きます
   </div>
 
 
   <!-- 江戸川車庫前 -->
-
   <div class="card">
 
-    <div class="stop-header">
+    <div class="stop-name">
+      江戸川車庫前
+    </div>
 
-      <div>
+    <div class="route">
+      秋26　葛西駅前行
+    </div>
 
-        <div class="stop-name">
-          江戸川車庫前
-        </div>
-
-        <div class="route">
-          秋26　葛西駅前行
-        </div>
-
-      </div>
+    <div class="buttons">
 
       <a
-        class="official"
-        href="https://tobus.jp/sp/blsys/stop/time?routecode=81&poleno=2&stopid=310&ln=ja"
-        target="_blank"
-        rel="noopener">
-        都バス公式
+        class="btn btn-time"
+        href="https://tobus.jp/sp/blsys/stop/time?ud=2&poleno=2&ln=ja&stopid=310&routecode=81">
+        🕒 時刻表
+      </a>
+
+      <a
+        class="btn btn-approach"
+        href="https://tobus.jp/blsys/navi?VCD=csrst&ECD=NEXT&LCD=&func=fap&method=msn&slst=310&slrsp=&srtxt=%E6%B1%9F%E6%88%B8%E5%B7%9D">
+        📍 接近情報
       </a>
 
     </div>
 
-    <div
-      id="edogawa"
-      class="status">
-      読み込み中…
+  </div>
+
+
+  <!-- 葛西郵便局 -->
+  <div class="card">
+
+    <div class="stop-name">
+      葛西郵便局
+    </div>
+
+    <div class="route">
+      葛西24　なぎさニュータウン行
+    </div>
+
+    <div class="buttons">
+
+      <a
+        class="btn btn-time"
+        href="https://tobus.jp/sp/blsys/stop/time?ud=1&poleno=2&ln=ja&stopid=2084&routecode=76">
+        🕒 時刻表
+      </a>
+
+      <a
+        class="btn btn-approach"
+        href="https://tobus.jp/blsys/navi?VCD=csrst&ECD=NEXT&LCD=&func=fap&method=msn&slst=2084&slrsp=&srtxt=%E8%91%9B%E8%A5%BF%E9%83%B5%E4%BE%BF">
+        📍 接近情報
+      </a>
+
     </div>
 
   </div>
 
+
+  <div class="hint">
+    時刻表・接近情報はいずれも都バス公式ページを開きます。
+  </div>
+
 </div>
-
-
-<script>
-
-function updateClock() {
-
-  const now = new Date();
-
-  const date =
-    now.toLocaleDateString(
-      "ja-JP",
-      {
-        month: "numeric",
-        day: "numeric",
-        weekday: "short"
-      }
-    );
-
-  const time =
-    now.toLocaleTimeString(
-      "ja-JP",
-      {
-        hour: "2-digit",
-        minute: "2-digit"
-      }
-    );
-
-  document
-    .getElementById("now")
-    .textContent =
-      date + " " + time;
-}
-
-
-
-function currentMinutes() {
-
-  const now = new Date();
-
-  return (
-    now.getHours() * 60
-    +
-    now.getMinutes()
-  );
-}
-
-
-
-function toBusObject(
-  timeString
-) {
-
-  const parts =
-    timeString
-      .split(":")
-      .map(Number);
-
-  const hour =
-    parts[0];
-
-  const minute =
-    parts[1];
-
-  return {
-
-    label:
-      String(hour)
-        .padStart(2, "0")
-      +
-      ":"
-      +
-      String(minute)
-        .padStart(2, "0"),
-
-    total:
-      hour * 60
-      +
-      minute
-
-  };
-}
-
-
-
-function renderStop(
-  stop
-) {
-
-  const element =
-    document.getElementById(
-      stop.id
-    );
-
-  if (!element) {
-    return;
-  }
-
-
-  if (
-    !stop.ok
-    ||
-    !Array.isArray(stop.times)
-    ||
-    stop.times.length === 0
-  ) {
-
-    element.innerHTML = `
-      <div class="error">
-        このバス停の時刻表データを取得できませんでした。
-      </div>
-    `;
-
-    return;
-  }
-
-
-  const now =
-    currentMinutes();
-
-
-  const timetable =
-    stop.times
-      .map(toBusObject)
-      .sort(
-        (a, b) =>
-          a.total - b.total
-      );
-
-
-  /*
-    現在時刻より前の
-    一番近い1本
-  */
-
-  const previous =
-    timetable
-      .filter(
-        bus =>
-          bus.total < now
-      )
-      .at(-1);
-
-
-  /*
-    現在時刻から
-    2時間以内
-  */
-
-  const end =
-    now + 120;
-
-
-  const upcoming =
-    timetable
-      .filter(
-        bus =>
-          bus.total >= now
-          &&
-          bus.total <= end
-      );
-
-
-  let html = "";
-
-
-  /*
-    都バス側が返した
-    当日のダイヤ情報
-  */
-
-  if (
-    stop.service_note
-  ) {
-
-    html += `
-      <div class="service-note">
-        ${stop.service_note}
-      </div>
-    `;
-
-  }
-
-
-  /*
-    直前1本
-  */
-
-  if (
-    previous
-  ) {
-
-    html += `
-      <div class="previous">
-
-        直前の便　
-        <strong>
-          ${previous.label}
-        </strong>
-
-      </div>
-    `;
-
-  }
-
-
-  /*
-    これからの便
-  */
-
-  if (
-    upcoming.length > 0
-  ) {
-
-    const next =
-      upcoming[0];
-
-
-    const diff =
-      next.total - now;
-
-
-    html += `
-      <div class="next">
-
-        <div class="next-label">
-          次のバス
-        </div>
-
-        <div class="next-row">
-
-          <div class="next-time">
-            ${next.label}
-          </div>
-
-          <div class="minutes">
-            あと ${diff}分
-          </div>
-
-        </div>
-
-      </div>
-    `;
-
-
-    html += `
-      <div class="section-label">
-        これから2時間
-      </div>
-
-      <div class="times">
-
-        ${
-          upcoming
-            .map(
-              bus => `
-                <div class="time">
-                  ${bus.label}
-                </div>
-              `
-            )
-            .join("")
-        }
-
-      </div>
-    `;
-
-  }
-
-  else {
-
-    html += `
-      <div class="status">
-        これから2時間以内の便はありません。
-      </div>
-    `;
-
-  }
-
-
-  element.innerHTML =
-    html;
-}
-
-
-
-function formatFetchedTime(
-  value
-) {
-
-  if (!value) {
-    return "";
-  }
-
-  const date =
-    new Date(value);
-
-  if (
-    Number.isNaN(
-      date.getTime()
-    )
-  ) {
-    return "";
-  }
-
-  return date
-    .toLocaleTimeString(
-      "ja-JP",
-      {
-        hour: "2-digit",
-        minute: "2-digit"
-      }
-    );
-}
-
-
-
-async function loadBusData() {
-
-  updateClock();
-
-
-  const status =
-    document.getElementById(
-      "globalStatus"
-    );
-
-
-  status.textContent =
-    "最新データを読み込んでいます…";
-
-
-  try {
-
-    /*
-      ?t= を付けることで
-      Safariのキャッシュを避ける
-    */
-
-    const response =
-      await fetch(
-        "bus_data.json?t="
-        +
-        Date.now(),
-        {
-          cache: "no-store"
-        }
-      );
-
-
-    if (
-      !response.ok
-    ) {
-
-      throw new Error(
-        "bus_data.json がありません"
-      );
-
-    }
-
-
-    const data =
-      await response.json();
-
-
-    if (
-      !Array.isArray(
-        data.stops
-      )
-    ) {
-
-      throw new Error(
-        "データ形式が不正です"
-      );
-
-    }
-
-
-    data.stops.forEach(
-      renderStop
-    );
-
-
-    const fetched =
-      formatFetchedTime(
-        data.fetched_at
-      );
-
-
-    status.textContent =
-      fetched
-        ?
-        "都バス公式データ取得 "
-        + fetched
-        :
-        "都バス公式データを表示中";
-
-
-  }
-
-  catch(error) {
-
-    console.error(
-      error
-    );
-
-
-    status.textContent =
-      "まだ時刻表データが作成されていません。";
-
-
-    document
-      .getElementById(
-        "kasai-post"
-      )
-      .innerHTML = `
-        <div class="error">
-          時刻表データを読み込めませんでした。
-        </div>
-      `;
-
-
-    document
-      .getElementById(
-        "edogawa"
-      )
-      .innerHTML = `
-        <div class="error">
-          時刻表データを読み込めませんでした。
-        </div>
-      `;
-
-  }
-
-}
-
-
-
-document
-  .getElementById(
-    "reloadButton"
-  )
-  .addEventListener(
-    "click",
-    loadBusData
-  );
-
-
-
-/*
-  ページを開いた時
-*/
-
-loadBusData();
-
-
-
-/*
-  1分ごとに
-  現在時刻を更新して
-  直前・次便も再計算
-*/
-
-setInterval(
-  loadBusData,
-  60000
-);
-
-</script>
 
 </body>
 </html>
