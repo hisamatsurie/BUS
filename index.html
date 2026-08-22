@@ -1,1 +1,456 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>バス案内</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 18px 14px 40px;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      background: #f3f5f7;
+      color: #222;
+    }
+
+    .container {
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin: 0 0 16px;
+      font-size: 28px;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .tab {
+      border: 0;
+      border-radius: 12px;
+      min-height: 52px;
+
+      font-size: 16px;
+      font-weight: 700;
+
+      background: #e6e8eb;
+      color: #555;
+    }
+
+    .tab.active {
+      background: #287cf4;
+      color: white;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .page-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 0 0 18px;
+    }
+
+    .section-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #444;
+
+      margin: 24px 4px 10px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 14px;
+
+      box-shadow:
+        0 2px 9px rgba(0,0,0,.05);
+    }
+
+    .stop-name {
+      font-size: 21px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .route {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      min-height: 54px;
+      padding: 10px;
+
+      border-radius: 12px;
+
+      text-decoration: none;
+      text-align: center;
+
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .btn-time {
+      background: #287cf4;
+      color: white;
+    }
+
+    .btn-approach {
+      background: #eef4ff;
+      color: #1765c1;
+
+      border: 1px solid #cfddf4;
+    }
+
+    .note {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #999;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>🚌 バス案内</h1>
+
+  <div class="tabs">
+
+    <button
+      class="tab active"
+      id="homeTab"
+      type="button">
+      🏠 自宅から
+    </button>
+
+    <button
+      class="tab"
+      id="companyTab"
+      type="button">
+      🏢 会社から
+    </button>
+
+  </div>
+
+
+  <!-- 自宅から -->
+
+  <section
+    class="page active"
+    id="homePage">
+
+    <div class="page-title">
+      🏠 自宅から
+    </div>
+
+
+    <div class="section-title">
+      葛西方面
+    </div>
+
+
+    <!-- 江戸川車庫前 -->
+
+    <div class="card">
+
+      <div class="stop-name">
+        江戸川車庫前
+      </div>
+
+      <div class="route">
+        秋26　葛西駅前行
+      </div>
+
+      <div class="buttons">
+
+        <a
+          class="btn btn-time"
+          href="https://tobus.jp/sp/blsys/stop/time?ud=2&poleno=2&ln=ja&stopid=310&routecode=81">
+          🕒 時刻表
+        </a>
+
+        <a
+          class="btn btn-approach"
+          href="https://tobus.jp/blsys/navi?VCD=csrst&ECD=NEXT&LCD=&func=fap&method=msn&slst=310&slrsp=&srtxt=%E6%B1%9F%E6%88%B8%E5%B7%9D">
+          📍 接近情報
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <!-- 葛西郵便局 葛西方面 -->
+
+    <div class="card">
+
+      <div class="stop-name">
+        葛西郵便局
+      </div>
+
+      <div class="route">
+        葛西24　なぎさニュータウン行
+      </div>
+
+      <div class="buttons">
+
+        <a
+          class="btn btn-time"
+          href="https://tobus.jp/sp/blsys/stop/time?ud=1&poleno=2&ln=ja&stopid=2084&routecode=76">
+          🕒 時刻表
+        </a>
+
+        <a
+          class="btn btn-approach"
+          href="https://tobus.jp/blsys/navi?VCD=csrst&ECD=NEXT&LCD=&func=fap&method=msn&slst=2084&slrsp=&srtxt=%E8%91%9B%E8%A5%BF%E9%83%B5%E4%BE%BF">
+          📍 接近情報
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <div class="section-title">
+      船堀方面
+    </div>
+
+
+    <!-- 葛西郵便局 船堀方面 -->
+
+    <div class="card">
+
+      <div class="stop-name">
+        葛西郵便局
+      </div>
+
+      <div class="route">
+        船堀方面
+      </div>
+
+      <div class="buttons">
+
+        <a
+          class="btn btn-time"
+          href="https://tobus.jp/sp/blsys/stop/time?routecode=76&poleno=1&stopid=2084&ln=ja">
+          🕒 時刻表
+        </a>
+
+        <a
+          class="btn btn-approach"
+          href="https://tobus.jp/blsys/navi?VCD=csrst&ECD=NEXT&LCD=&func=fap&method=msn&slst=2084&slrsp=&srtxt=%E8%91%9B%E8%A5%BF%E9%83%B5%E4%BE%BF">
+          📍 接近情報
+        </a>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- 会社から -->
+
+  <section
+    class="page"
+    id="companyPage">
+
+    <div class="page-title">
+      🏢 会社から
+    </div>
+
+
+    <div class="section-title">
+      東陽町行き
+    </div>
+
+
+    <!-- 東陽七丁目 -->
+
+    <div class="card">
+
+      <div class="stop-name">
+        東陽七丁目
+      </div>
+
+      <div class="route">
+        東陽町方面
+      </div>
+
+      <div class="buttons">
+
+        <a
+          class="btn btn-time"
+          href="https://tobus.jp/sp/blsys/stop/time?ud=1&poleno=1&ln=ja&stopid=2298&routecode=59&daydiv=1">
+          🕒 時刻表
+        </a>
+
+        <a
+          class="btn btn-approach"
+          href="https://tobus.jp/blsys/navi?VCD=csrst&ECD=NEXT&LCD=&func=fap&method=msn&slst=2298&slrsp=&srtxt=%E6%9D%B1%E9%99%BD">
+          📍 接近情報
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <div class="section-title">
+      葛西行き
+    </div>
+
+
+    <!-- 北砂一丁目 -->
+
+    <div class="card">
+
+      <div class="stop-name">
+        北砂一丁目
+      </div>
+
+      <div class="route">
+        秋26　葛西駅前行
+      </div>
+
+      <div class="buttons">
+
+        <a
+          class="btn btn-time"
+          href="https://tobus.jp/sp/blsys/stop/time?stopid=409&ud=2&poleno=1&ln=ja&routecode=81">
+          🕒 時刻表
+        </a>
+
+        <a
+          class="btn btn-approach"
+          href="https://tobus.jp/blsys/navi?VCD=csrst&ECD=NEXT&LCD=&func=fap&method=msn&slst=409&slrsp=&srtxt=%E5%8C%97%E7%A0%82">
+          📍 接近情報
+        </a>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <div class="note">
+    時刻表・接近情報はいずれも都バス公式ページを開きます。
+  </div>
+
+</div>
+
+
+<script>
+
+const homeTab =
+  document.getElementById(
+    "homeTab"
+  );
+
+const companyTab =
+  document.getElementById(
+    "companyTab"
+  );
+
+const homePage =
+  document.getElementById(
+    "homePage"
+  );
+
+const companyPage =
+  document.getElementById(
+    "companyPage"
+  );
+
+
+homeTab.addEventListener(
+  "click",
+  () => {
+
+    homeTab.classList.add(
+      "active"
+    );
+
+    companyTab.classList.remove(
+      "active"
+    );
+
+    homePage.classList.add(
+      "active"
+    );
+
+    companyPage.classList.remove(
+      "active"
+    );
+
+  }
+);
+
+
+companyTab.addEventListener(
+  "click",
+  () => {
+
+    companyTab.classList.add(
+      "active"
+    );
+
+    homeTab.classList.remove(
+      "active"
+    );
+
+    companyPage.classList.add(
+      "active"
+    );
+
+    homePage.classList.remove(
+      "active"
+    );
+
+  }
+);
+
+</script>
+
+</body>
+</html>
