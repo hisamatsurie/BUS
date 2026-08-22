@@ -86,7 +86,7 @@ def parse_timetable(html, stop_id=""):
     )
 
     if end != -1:
-        text = text[:end]
+        text = text[:end:]
 
     times = []
 
