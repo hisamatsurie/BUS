@@ -41,9 +41,10 @@ def fetch_html(url):
     request = Request(
         url,
         headers={
-            "User-Agent": "Mozilla/5.0",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
             "Accept-Language": "ja,en;q=0.8",
             "Cache-Control": "no-cache",
+            "Referer": "https://tobus.jp/",
         },
     )
 
@@ -53,10 +54,16 @@ def fetch_html(url):
         return raw.decode(charset, errors="replace")
 
 
-def parse_timetable(html):
+def parse_timetable(html, stop_id=""):
     parser = TextExtractor()
     parser.feed(html)
     text = parser.get_text()
+
+    # Debug: save the extracted text for inspection
+    print(f"\n=== Debug info for {stop_id} ===")
+    print(f"Text length: {len(text)} characters")
+    print(f"First 500 chars:\n{text[:500]}")
+    print("=" * 40)
 
     note_match = re.search(
         r"(\d{1,2}月\d{1,2}日の[^\n]*ダイヤで運行しております。)",
@@ -89,6 +96,10 @@ def parse_timetable(html):
             text
         )
     )
+
+    print(f"Hour matches found: {len(hour_matches)}")
+    if hour_matches:
+        print(f"First few hour matches: {[m.group(1) for m in hour_matches[:5]]}")
 
     for i, match in enumerate(hour_matches):
         hour = int(match.group(1))
@@ -127,6 +138,10 @@ def parse_timetable(html):
         tuple(map(int, value.split(":"))),
     )
 
+    print(f"Times found: {len(times)}")
+    if times:
+        print(f"Sample times: {times[:5]}")
+
     if not times:
         raise ValueError(
             "No timetable times found"
@@ -150,10 +165,12 @@ def main():
 
     for stop in STOPS:
         try:
+            print(f"\nFetching {stop['id']}...")
             html = fetch_html(stop["url"])
+            print(f"HTML fetched, length: {len(html)}")
 
             service_note, times = (
-                parse_timetable(html)
+                parse_timetable(html, stop["id"])
             )
 
             result["stops"].append({
@@ -162,8 +179,10 @@ def main():
                 "times": times,
                 "ok": True,
             })
+            print(f"✓ {stop['id']} succeeded")
 
         except Exception as exc:
+            print(f"✗ {stop['id']} failed: {type(exc).__name__}: {exc}")
             result["stops"].append({
                 **stop,
                 "service_note": "",
@@ -192,6 +211,8 @@ def main():
             indent=2,
         )
         file.write("\n")
+
+    print("\n✓ Successfully wrote bus_data.json")
 
 
 if __name__ == "__main__":
