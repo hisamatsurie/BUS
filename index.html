@@ -37,7 +37,7 @@
 
     .tabs {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: 8px;
       margin-bottom: 22px;
     }
@@ -46,7 +46,8 @@
       border: 0;
       border-radius: 12px;
       min-height: 52px;
-      font-size: 16px;
+      padding: 6px 4px;
+      font-size: 15px;
       font-weight: 700;
       background: #edf1f5;
       color: #657080;
@@ -154,6 +155,10 @@
       🏢 会社から
     </button>
 
+    <button class="tab" id="otherTab" type="button">
+      その他
+    </button>
+
   </div>
 
 
@@ -251,7 +256,7 @@
       </div>
 
       <div class="route">
-        船堀方面
+        葛西24　船堀駅前行
       </div>
 
       <div class="buttons">
@@ -302,7 +307,7 @@
       </div>
 
       <div class="route">
-        東陽町方面
+        門21　門前仲町行・東陽町駅前行
       </div>
 
       <div class="buttons">
@@ -371,7 +376,7 @@
       </div>
 
       <div class="route">
-        葛西行き
+        秋26　葛西駅前行
       </div>
 
       <div class="buttons">
@@ -385,6 +390,143 @@
         <a
           class="btn btn-approach"
           href="https://tobus.jp/blsys/navi?VCD=cslst&ECD=NEXT&LCD=&func=fap&method=msl&syl=&slst=192&slrsp=">
+          📍 接近情報
+        </a>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ========================
+       その他
+  ========================= -->
+
+  <section class="page" id="otherPage">
+
+    <div class="page-title">
+      その他
+    </div>
+
+
+    <!-- 葛西駅前 葛西24 -->
+
+    <div class="card">
+
+      <div class="stop-name">
+        葛西駅前
+      </div>
+
+      <div class="route">
+        葛西24　船堀駅前行
+      </div>
+
+      <div class="buttons">
+
+        <a
+          class="btn btn-time"
+          href="https://tobus.jp/sp/blsys/stop/time?routecode=76&poleno=6&stopid=307&ln=ja">
+          🕒 時刻表
+        </a>
+
+        <a
+          class="btn btn-approach"
+          href="https://tobus.jp/blsys/navi?VCD=csrst&ECD=NEXT&LCD=&func=fap&method=msn&slst=307&slrsp=&srtxt=葛西">
+          📍 接近情報
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <!-- 葛西駅前 秋26 -->
+
+    <div class="card">
+
+      <div class="stop-name">
+        葛西駅前
+      </div>
+
+      <div class="route">
+        秋26　秋葉原駅前行
+      </div>
+
+      <div class="buttons">
+
+        <a
+          class="btn btn-time"
+          href="https://tobus.jp/sp/blsys/stop/time?ln=ja&routecode=81&poleno=4&stopid=307">
+          🕒 時刻表
+        </a>
+
+        <a
+          class="btn btn-approach"
+          href="https://tobus.jp/blsys/navi?VCD=csrst&ECD=NEXT&LCD=&func=fap&method=msn&slst=307&slrsp=&srtxt=葛西">
+          📍 接近情報
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <!-- 船堀駅前 -->
+
+    <div class="card">
+
+      <div class="stop-name">
+        船堀駅前
+      </div>
+
+      <div class="route">
+        葛西24　なぎさニュータウン行
+      </div>
+
+      <div class="buttons">
+
+        <a
+          class="btn btn-time"
+          href="https://tobus.jp/sp/blsys/stop/time?ln=ja&routecode=76&poleno=4&stopid=2032">
+          🕒 時刻表
+        </a>
+
+        <a
+          class="btn btn-approach"
+          href="https://tobus.jp/blsys/navi?VCD=csrst&ECD=NEXT&LCD=&func=fap&method=msn&slst=2032&slrsp=&srtxt=船堀">
+          📍 接近情報
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <!-- 宇喜田 -->
+
+    <div class="card">
+
+      <div class="stop-name">
+        宇喜田
+      </div>
+
+      <div class="route">
+        秋26　葛西駅前行
+      </div>
+
+      <div class="buttons">
+
+        <a
+          class="btn btn-time"
+          href="https://tobus.jp/sp/blsys/stop/time?ln=ja&routecode=81&poleno=1&stopid=136">
+          🕒 時刻表
+        </a>
+
+        <a
+          class="btn btn-approach"
+          href="https://tobus.jp/blsys/navi?VCD=cslst&ECD=NEXT&LCD=&func=fap&method=msl&syl=&slst=136&slrsp=">
           📍 接近情報
         </a>
 
@@ -410,22 +552,30 @@ const homeTab =
 const companyTab =
   document.getElementById("companyTab");
 
+const otherTab =
+  document.getElementById("otherTab");
+
 const homePage =
   document.getElementById("homePage");
 
 const companyPage =
   document.getElementById("companyPage");
 
+const otherPage =
+  document.getElementById("otherPage");
 
-/* 自宅・会社 切り替え */
+
+/* 自宅・会社・その他 切り替え */
 
 homeTab.addEventListener("click", () => {
 
   homeTab.classList.add("active");
   companyTab.classList.remove("active");
+  otherTab.classList.remove("active");
 
   homePage.classList.add("active");
   companyPage.classList.remove("active");
+  otherPage.classList.remove("active");
 
 });
 
@@ -434,9 +584,24 @@ companyTab.addEventListener("click", () => {
 
   companyTab.classList.add("active");
   homeTab.classList.remove("active");
+  otherTab.classList.remove("active");
 
   companyPage.classList.add("active");
   homePage.classList.remove("active");
+  otherPage.classList.remove("active");
+
+});
+
+
+otherTab.addEventListener("click", () => {
+
+  otherTab.classList.add("active");
+  homeTab.classList.remove("active");
+  companyTab.classList.remove("active");
+
+  otherPage.classList.add("active");
+  homePage.classList.remove("active");
+  companyPage.classList.remove("active");
 
 });
 
