@@ -157,7 +157,9 @@
   </div>
 
 
-  <!-- 自宅から -->
+  <!-- ========================
+       自宅から
+  ========================= -->
 
   <section class="page active" id="homePage">
 
@@ -273,7 +275,9 @@
   </section>
 
 
-  <!-- 会社から -->
+  <!-- ========================
+       会社から
+  ========================= -->
 
   <section class="page" id="companyPage">
 
@@ -288,6 +292,8 @@
       東陽町行き
     </div>
 
+
+    <!-- 東陽七丁目 -->
 
     <div class="card">
 
@@ -325,6 +331,8 @@
     </div>
 
 
+    <!-- 北砂一丁目 -->
+
     <div class="card">
 
       <div class="stop-name">
@@ -353,6 +361,37 @@
 
     </div>
 
+
+    <!-- 扇橋二丁目 -->
+
+    <div class="card">
+
+      <div class="stop-name">
+        扇橋二丁目
+      </div>
+
+      <div class="route">
+        葛西行き
+      </div>
+
+      <div class="buttons">
+
+        <a
+          class="btn btn-time"
+          href="https://tobus.jp/sp/blsys/stop/time?ln=ja&routecode=81&poleno=3&stopid=192">
+          🕒 時刻表
+        </a>
+
+        <a
+          class="btn btn-approach"
+          href="https://tobus.jp/blsys/navi?VCD=cslst&ECD=NEXT&LCD=&func=fap&method=msl&syl=&slst=192&slrsp=">
+          📍 接近情報
+        </a>
+
+      </div>
+
+    </div>
+
   </section>
 
 
@@ -365,11 +404,17 @@
 
 <script>
 
-const homeTab = document.getElementById("homeTab");
-const companyTab = document.getElementById("companyTab");
+const homeTab =
+  document.getElementById("homeTab");
 
-const homePage = document.getElementById("homePage");
-const companyPage = document.getElementById("companyPage");
+const companyTab =
+  document.getElementById("companyTab");
+
+const homePage =
+  document.getElementById("homePage");
+
+const companyPage =
+  document.getElementById("companyPage");
 
 
 /* 自宅・会社 切り替え */
@@ -407,18 +452,15 @@ document.querySelectorAll(".btn-time").forEach(button => {
 
     event.preventDefault();
 
-    /* 現在の「時」を取得 */
     const hour =
       String(new Date().getHours()).padStart(2, "0");
 
-    /* 元の都バスURL */
-    const baseUrl = this.href.split("#")[0];
+    const baseUrl =
+      this.href.split("#")[0];
 
-    /* 例：14ジ */
     const target =
       encodeURIComponent(hour + "ジ");
 
-    /* 都バス公式を現在時刻の行から開く */
     window.location.href =
       baseUrl + "#:~:text=" + target;
 
